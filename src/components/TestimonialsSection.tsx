@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Icon from "@/components/ui/icon";
+import VideoTestimonialModal from "@/components/VideoTestimonialModal";
 
 interface Testimonial {
   id: string;
@@ -54,7 +56,56 @@ const testimonials: Testimonial[] = [
   }
 ];
 
+interface VideoTestimonial {
+  id: string;
+  title: string;
+  name: string;
+  result: string;
+  timeframe: string;
+  plan: string;
+  thumbnail: string;
+  description: string;
+  duration: string;
+}
+
+const videoTestimonials: VideoTestimonial[] = [
+  {
+    id: "video1",
+    title: "От нуля до миллиона за 3 месяца",
+    name: "Александр Петров", 
+    result: "₽850,000",
+    timeframe: "3 месяца",
+    plan: "Премиум",
+    thumbnail: "/img/99e29354-6309-4a3b-852a-f08ab85417aa.jpg",
+    description: "Александр рассказывает, как ему удалось кардинально изменить свою жизнь",
+    duration: "8:45"
+  },
+  {
+    id: "video2",
+    title: "Секреты успешного масштабирования",
+    name: "Елена Смирнова",
+    result: "₽1,200,000", 
+    timeframe: "4 месяца",
+    plan: "VIP",
+    thumbnail: "/img/b7a60e99-f619-4f5e-b0f4-df81bfa99da6.jpg",
+    description: "Елена делится стратегиями роста и масштабирования бизнеса",
+    duration: "12:30"
+  },
+  {
+    id: "video3",
+    title: "VIP-инвестиции: эксклюзивный опыт", 
+    name: "Михаил Волков",
+    result: "₽2,100,000",
+    timeframe: "2 месяца",
+    plan: "VIP",
+    thumbnail: "/img/7d7deb6f-fb21-4c91-a66f-e9da2103d680.jpg",
+    description: "Михаил о закрытых инвестиционных возможностях VIP-плана",
+    duration: "15:20"
+  }
+];
+
 const TestimonialsSection = () => {
+  const [selectedVideo, setSelectedVideo] = useState<VideoTestimonial | null>(null);
   return (
     <section className="px-6 py-20 bg-gradient-to-br from-gray-50 to-orange-50">
       <div className="max-w-6xl mx-auto">
@@ -179,7 +230,7 @@ const TestimonialsSection = () => {
           </div>
         </div>
 
-        {/* Video testimonials placeholder */}
+        {/* Video testimonials */}
         <div className="mt-16">
           <div className="text-center mb-8">
             <h3 className="text-3xl font-bold text-gray-900 mb-4 font-['Montserrat']">
@@ -189,25 +240,80 @@ const TestimonialsSection = () => {
           </div>
           
           <div className="grid md:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="relative bg-gray-900 rounded-xl overflow-hidden aspect-video group cursor-pointer">
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-amber-500/20"></div>
+            {videoTestimonials.map((video) => (
+              <div 
+                key={video.id} 
+                className="relative bg-gray-900 rounded-xl overflow-hidden aspect-video group cursor-pointer transform hover:scale-105 transition-all duration-300"
+                onClick={() => setSelectedVideo(video)}
+              >
+                {/* Thumbnail */}
+                <div 
+                  className="absolute inset-0 bg-cover bg-center"
+                  style={{ backgroundImage: `url(${video.thumbnail})` }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-br from-orange-500/30 to-amber-500/30 group-hover:from-orange-500/40 group-hover:to-amber-500/40 transition-colors duration-300"></div>
+                </div>
+                
+                {/* Play Button */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="bg-white/90 backdrop-blur-sm rounded-full p-4 group-hover:scale-110 transition-transform duration-300">
+                  <div className="bg-white/90 backdrop-blur-sm rounded-full p-4 group-hover:scale-110 group-hover:bg-white transition-all duration-300 shadow-lg">
                     <Icon name="Play" className="text-orange-600" size={24} />
                   </div>
                 </div>
+                
+                {/* Video Info */}
+                <div className="absolute top-4 right-4">
+                  <Badge className="bg-orange-500 text-white text-xs">
+                    {video.duration}
+                  </Badge>
+                </div>
+                
+                {/* Bottom Info */}
                 <div className="absolute bottom-4 left-4 right-4">
-                  <div className="bg-black/60 backdrop-blur-sm rounded-lg p-3 text-white">
-                    <h4 className="font-semibold">Отзыв участника #{i}</h4>
-                    <p className="text-sm text-gray-300">Результат за {i + 1} месяца</p>
+                  <div className="bg-black/70 backdrop-blur-sm rounded-lg p-3 text-white">
+                    <h4 className="font-semibold text-sm mb-1">{video.title}</h4>
+                    <p className="text-xs text-gray-300 mb-1">{video.name}</p>
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="text-orange-400 font-semibold">{video.result}</span>
+                      <span className="text-gray-400">{video.timeframe}</span>
+                    </div>
                   </div>
                 </div>
+                
+                {/* Hover overlay */}
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
               </div>
             ))}
           </div>
+          
+          {/* Call to action */}
+          <div className="text-center mt-8">
+            <p className="text-gray-600 mb-4">Хотите добавить свой отзыв в эту коллекцию успеха?</p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Badge variant="outline" className="border-orange-500 text-orange-600 px-4 py-2">
+                <Icon name="Video" className="mr-2" size={14} />
+                3 видео-истории
+              </Badge>
+              <Badge variant="outline" className="border-amber-500 text-amber-600 px-4 py-2">
+                <Icon name="TrendingUp" className="mr-2" size={14} />
+                Средний результат: ₽1.4M
+              </Badge>
+              <Badge variant="outline" className="border-orange-500 text-orange-600 px-4 py-2">
+                <Icon name="Clock" className="mr-2" size={14} />
+                Средний срок: 3 месяца
+              </Badge>
+            </div>
+          </div>
         </div>
       </div>
+      
+      {/* Video Modal */}
+      {selectedVideo && (
+        <VideoTestimonialModal
+          video={selectedVideo}
+          onClose={() => setSelectedVideo(null)}
+        />
+      )}
     </section>
   );
 };
