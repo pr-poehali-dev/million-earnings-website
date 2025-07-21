@@ -1,9 +1,19 @@
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Icon from "@/components/ui/icon";
+import RegistrationForm from "@/components/RegistrationForm";
 
 const Index = () => {
+  const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState("premium");
+
+  const openRegistration = (planId?: string) => {
+    if (planId) setSelectedPlan(planId);
+    setIsRegistrationOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50">
       {/* Hero Section */}
@@ -28,7 +38,10 @@ const Index = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-            <Button className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+            <Button 
+              onClick={() => openRegistration()}
+              className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+            >
               <Icon name="Rocket" className="mr-2" size={20} />
               Начать зарабатывать
             </Button>
@@ -81,7 +94,10 @@ const Index = () => {
                   <Icon name="Check" className="text-green-500" size={20} />
                   <span>Техническая поддержка</span>
                 </div>
-                <Button className="w-full mt-6 bg-gray-900 hover:bg-gray-800 text-white rounded-full py-3 font-semibold">
+                <Button 
+                  onClick={() => openRegistration("basic")}
+                  className="w-full mt-6 bg-gray-900 hover:bg-gray-800 text-white rounded-full py-3 font-semibold"
+                >
                   Выбрать план
                 </Button>
               </CardContent>
@@ -120,7 +136,10 @@ const Index = () => {
                   <Icon name="Gift" className="text-orange-500" size={20} />
                   <span className="font-semibold text-orange-600">Бонус: 5% от прибыли</span>
                 </div>
-                <Button className="w-full mt-6 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-full py-3 font-semibold">
+                <Button 
+                  onClick={() => openRegistration("premium")}
+                  className="w-full mt-6 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white rounded-full py-3 font-semibold"
+                >
                   Выбрать план
                 </Button>
               </CardContent>
@@ -154,7 +173,10 @@ const Index = () => {
                   <Icon name="Gift" className="text-amber-500" size={20} />
                   <span className="font-semibold text-amber-600">Бонус: 10% от прибыли</span>
                 </div>
-                <Button className="w-full mt-6 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white rounded-full py-3 font-semibold">
+                <Button 
+                  onClick={() => openRegistration("vip")}
+                  className="w-full mt-6 bg-gradient-to-r from-amber-500 to-yellow-500 hover:from-amber-600 hover:to-yellow-600 text-white rounded-full py-3 font-semibold"
+                >
                   Выбрать план
                 </Button>
               </CardContent>
@@ -223,7 +245,10 @@ const Index = () => {
             <p className="text-xl">до окончания акции</p>
           </div>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-white text-orange-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold rounded-full shadow-lg">
+            <Button 
+              onClick={() => openRegistration()}
+              className="bg-white text-orange-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold rounded-full shadow-lg"
+            >
               <Icon name="Zap" className="mr-2" size={20} />
               Воспользоваться скидкой
             </Button>
@@ -263,6 +288,14 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Registration Modal */}
+      {isRegistrationOpen && (
+        <RegistrationForm
+          selectedPlan={selectedPlan}
+          onClose={() => setIsRegistrationOpen(false)}
+        />
+      )}
     </div>
   );
 };
